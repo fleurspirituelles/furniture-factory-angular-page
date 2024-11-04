@@ -11,7 +11,7 @@ import { ArtDecoFurnitureFactoryService } from './app/services/art-deco-furnitur
 import { ModernFurnitureFactoryService } from './app/services/modern-furniture.factory.service';
 import { VictorianFurnitureFactoryService } from './app/services/victorian-furniture.factory.service';
 
-import { FurnitureFactory } from './app/interfaces/furniture-factory.interface';
+import { FurnitureFactory, Chair, CoffeeTable, Sofa } from './app/interfaces/furniture-factory.interface';
 
 @Component({
   selector: 'app-root',
@@ -19,78 +19,126 @@ import { FurnitureFactory } from './app/interfaces/furniture-factory.interface';
   imports: [ChairComponent, CoffeeTableComponent, SofaComponent, CommonModule, FormsModule],
   template: `
     <h1>Welcome to the Furniture Store!</h1>
-    <label>Select Furniture Style:</label>
-    <select [(ngModel)]="selectedStyle" (change)="updateFactory()">
-      <option value="art-deco">Art Deco</option>
-      <option value="modern">Modern</option>
-      <option value="victorian">Victorian</option>
-    </select>
 
-    <label>Select Furniture Type:</label>
-    <div>
-      <label>
-        <input type="checkbox" [(ngModel)]="furnitureSelection.chair" />
-        Chair
-      </label>
-      <label>
-        <input type="checkbox" [(ngModel)]="furnitureSelection.coffeeTable" />
-        Coffee Table
-      </label>
-      <label>
-        <input type="checkbox" [(ngModel)]="furnitureSelection.sofa" />
-        Sofa
-      </label>
+    <div *ngIf="!purchaseComplete">
+      <h2>Select a Furniture Item</h2>
+      <label>Furniture Type:</label>
+      <select [(ngModel)]="selectedFurnitureType">
+        <option value="chair">Chair</option>
+        <option value="coffeeTable">Coffee Table</option>
+        <option value="sofa">Sofa</option>
+      </select>
+
+      <label>Furniture Style:</label>
+      <select [(ngModel)]="selectedStyle">
+        <option value="art-deco">Art Deco</option>
+        <option value="modern">Modern</option>
+        <option value="victorian">Victorian</option>
+      </select>
+
+      <button (click)="addFurniture()">Add Furniture</button>
+
+      <h2>Shopping Cart</h2>
+      <ul>
+        <li *ngFor="let item of cart">
+          {{ item.type }} - {{ item.style }}<br>
+          {{ item.details }}
+        </li>
+      </ul>
+
+      <div *ngIf="permanentWarning" style="color: red;">
+        Mixed styles in your selection may affect aesthetics!
+      </div>
+
+      <button (click)="completePurchase()">Complete Purchase</button>
     </div>
 
-    <button (click)="confirmSelection()">Confirm Selection</button>
-
-    <div *ngIf="showWarning" style="color: red;">
-      Warning: It is recommended to select matching furniture styles.
-    </div>
-
-    <div *ngIf="selectedFactory">
-      <app-chair *ngIf="furnitureSelection.chair"></app-chair>
-      <app-coffee-table *ngIf="furnitureSelection.coffeeTable"></app-coffee-table>
-      <app-sofa *ngIf="furnitureSelection.sofa"></app-sofa>
+    <div *ngIf="purchaseComplete">
+      <h2>Purchase completed! Thank you for choosing us!</h2>
+      <button (click)="resetPurchase()">New Purchase</button>
     </div>
   `,
 })
 export class App {
+  selectedFurnitureType: string = 'chair';
   selectedStyle: string = 'art-deco';
-  selectedFactory: FurnitureFactory | null = null;
-  showWarning: boolean = false;
+  initialStyle: string | null = null;
 
-  furnitureSelection = {
-    chair: false,
-    coffeeTable: false,
-    sofa: false,
-  };
+  cart: Array<{ type: string; style: string; details: string }> = [];
+  styleWarning: boolean = false;
+  permanentWarning: boolean = false;
+  purchaseComplete: boolean = false;
 
   artDecoFactory = inject(ArtDecoFurnitureFactoryService);
   modernFactory = inject(ModernFurnitureFactoryService);
   victorianFactory = inject(VictorianFurnitureFactoryService);
 
-  updateFactory() {
+  addFurniture() {
+    if (!this.initialStyle) {
+      this.initialStyle = this.selectedStyle;
+    } else if (this.initialStyle !== this.selectedStyle) {
+      this.styleWarning = true;
+      this.permanentWarning = true;
+    } else {
+      this.styleWarning = false;
+    }
+
+    let factory: FurnitureFactory;
     switch (this.selectedStyle) {
       case 'art-deco':
-        this.selectedFactory = this.artDecoFactory;
+        factory = this.artDecoFactory;
         break;
       case 'modern':
-        this.selectedFactory = this.modernFactory;
+        factory = this.modernFactory;
         break;
       case 'victorian':
-        this.selectedFactory = this.victorianFactory;
+        factory = this.victorianFactory;
         break;
       default:
-        this.selectedFactory = null;
+        return;
     }
+
+    let details = '';
+    switch (this.selectedFurnitureType) {
+      case 'chair':
+      const chair = factory.createChair();
+      details = `This exquisite ${chair.style} chair, crafted from fine ${chair.material} with a splendid ${chair.color} finish, brings both elegance and comfort to any room. It offers a surface area of ${chair.calculateArea()} square centimeters, and with its weight of ${chair.weight} kg, it is ${chair.isLightweight(10) ? 'lightweight and easy to move' : 'sturdy and stable'}.`;
+      break;
+
+      case 'coffeeTable':
+        const coffeeTable = factory.createCoffeeTable();
+        details = `The ${coffeeTable.style} coffee table, a masterpiece of ${coffeeTable.material} with a ${coffeeTable.shape} shape in ${coffeeTable.color}, adds a touch of sophistication to your space. Its surface area spans ${coffeeTable.calculateSurfaceArea()} square centimeters, making it ${coffeeTable.isEasyToMove(15) ? 'easy to rearrange' : 'solid and steadfast'}.`;
+        break;
+
+      case 'sofa':
+        const sofa = factory.createSofa();
+        details = `Indulge in the comfort of this luxurious ${sofa.style} sofa, upholstered in premium ${sofa.material} and designed to accommodate up to ${sofa.seats} guests. With a generous volume of ${sofa.calculateVolume()} cubic centimeters, it provides ${sofa.isHeavy(20) ? 'a substantial presence in your living area' : 'a cozy yet light addition to any space'}.`;
+        break;
+        
+      default:
+        return;
+    }
+
+    this.cart.push({
+      type: this.selectedFurnitureType,
+      style: this.selectedStyle,
+      details,
+    });
+
+    this.styleWarning = false;
   }
 
-  confirmSelection() {
-    const selectedStyles = [this.artDecoFactory, this.modernFactory, this.victorianFactory];
-    this.showWarning = selectedStyles.filter(factory => factory === this.selectedFactory).length > 1;
+  completePurchase() {
+    this.purchaseComplete = true;
+  }
 
-    this.updateFactory();
+  resetPurchase() {
+    this.cart = [];
+    this.initialStyle = null;
+    this.permanentWarning = false;
+    this.purchaseComplete = false;
+    this.selectedFurnitureType = 'chair';
+    this.selectedStyle = 'art-deco';
   }
 }
 
