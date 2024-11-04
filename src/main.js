@@ -41,22 +41,59 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 var core_1 = require("@angular/core");
 var platform_browser_1 = require("@angular/platform-browser");
+var common_1 = require("@angular/common");
+var forms_1 = require("@angular/forms");
 var chair_component_1 = require("./app/components/chair.component");
 var coffee_table_component_1 = require("./app/components/coffee-table.component");
 var sofa_component_1 = require("./app/components/sofa.component");
+var art_deco_furniture_factory_service_1 = require("./app/services/art-deco-furniture.factory.service");
+var modern_furniture_factory_service_1 = require("./app/services/modern-furniture.factory.service");
+var victorian_furniture_factory_service_1 = require("./app/services/victorian-furniture.factory.service");
 var App = function () {
     var _classDecorators = [(0, core_1.Component)({
             selector: 'app-root',
             standalone: true,
-            imports: [chair_component_1.ChairComponent, coffee_table_component_1.CoffeeTableComponent, sofa_component_1.SofaComponent],
-            template: "\n    <h1>Welcome to the Furniture Store!</h1>\n    <app-chair></app-chair>\n    <app-coffee-table></app-coffee-table>\n    <app-sofa></app-sofa>\n  ",
+            imports: [chair_component_1.ChairComponent, coffee_table_component_1.CoffeeTableComponent, sofa_component_1.SofaComponent, common_1.CommonModule, forms_1.FormsModule],
+            template: "\n    <h1>Welcome to the Furniture Store!</h1>\n    <label>Select Furniture Style:</label>\n    <select [(ngModel)]=\"selectedStyle\" (change)=\"updateFactory()\">\n      <option value=\"art-deco\">Art Deco</option>\n      <option value=\"modern\">Modern</option>\n      <option value=\"victorian\">Victorian</option>\n    </select>\n\n    <label>Select Furniture Type:</label>\n    <div>\n      <label>\n        <input type=\"checkbox\" [(ngModel)]=\"furnitureSelection.chair\" />\n        Chair\n      </label>\n      <label>\n        <input type=\"checkbox\" [(ngModel)]=\"furnitureSelection.coffeeTable\" />\n        Coffee Table\n      </label>\n      <label>\n        <input type=\"checkbox\" [(ngModel)]=\"furnitureSelection.sofa\" />\n        Sofa\n      </label>\n    </div>\n\n    <button (click)=\"confirmSelection()\">Confirm Selection</button>\n\n    <div *ngIf=\"showWarning\" style=\"color: red;\">\n      Warning: It is recommended to select matching furniture styles.\n    </div>\n\n    <div *ngIf=\"selectedFactory\">\n      <app-chair *ngIf=\"furnitureSelection.chair\"></app-chair>\n      <app-coffee-table *ngIf=\"furnitureSelection.coffeeTable\"></app-coffee-table>\n      <app-sofa *ngIf=\"furnitureSelection.sofa\"></app-sofa>\n    </div>\n  ",
         })];
     var _classDescriptor;
     var _classExtraInitializers = [];
     var _classThis;
     var App = _classThis = /** @class */ (function () {
         function App_1() {
+            this.selectedStyle = 'art-deco';
+            this.selectedFactory = null;
+            this.showWarning = false;
+            this.furnitureSelection = {
+                chair: false,
+                coffeeTable: false,
+                sofa: false,
+            };
+            this.artDecoFactory = (0, core_1.inject)(art_deco_furniture_factory_service_1.ArtDecoFurnitureFactoryService);
+            this.modernFactory = (0, core_1.inject)(modern_furniture_factory_service_1.ModernFurnitureFactoryService);
+            this.victorianFactory = (0, core_1.inject)(victorian_furniture_factory_service_1.VictorianFurnitureFactoryService);
         }
+        App_1.prototype.updateFactory = function () {
+            switch (this.selectedStyle) {
+                case 'art-deco':
+                    this.selectedFactory = this.artDecoFactory;
+                    break;
+                case 'modern':
+                    this.selectedFactory = this.modernFactory;
+                    break;
+                case 'victorian':
+                    this.selectedFactory = this.victorianFactory;
+                    break;
+                default:
+                    this.selectedFactory = null;
+            }
+        };
+        App_1.prototype.confirmSelection = function () {
+            var _this = this;
+            var selectedStyles = [this.artDecoFactory, this.modernFactory, this.victorianFactory];
+            this.showWarning = selectedStyles.filter(function (factory) { return factory === _this.selectedFactory; }).length > 1;
+            this.updateFactory();
+        };
         return App_1;
     }());
     __setFunctionName(_classThis, "App");
