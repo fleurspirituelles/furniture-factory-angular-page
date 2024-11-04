@@ -1,1 +1,92 @@
-/* Add application styles & imports to this file! */
+:root {
+    --primary-color: #a67c52;
+    --secondary-color: #f4ede1;
+    --accent-color: #d9c7a0;
+    --text-color: #4a3b2b;
+    --button-hover-color: #b78c5d;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+}
+
+h1,
+h2 {
+    color: var(--primary-color);
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.2rem;
+}
+
+h2 {
+    font-size: 1.8rem;
+    margin-top: 1.5rem;
+}
+
+div {
+    padding: 10px;
+    margin: 0 auto;
+    max-width: 600px;
+    text-align: left;
+}
+
+select,
+button {
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--accent-color);
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    width: 100%;
+    margin-top: 10px;
+}
+
+select {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--button-hover-color);
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: var(--accent-color);
+    border-radius: 8px;
+}
+
+div[style*="color: red;"] {
+    color: #ff4d4d;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    font-size: 1rem;
+    border: none;
+}
