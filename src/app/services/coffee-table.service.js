@@ -38,36 +38,43 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.App = void 0;
+exports.CoffeeTableService = void 0;
 var core_1 = require("@angular/core");
-var platform_browser_1 = require("@angular/platform-browser");
-var chair_component_1 = require("./app/components/chair.component");
-var coffee_table_component_1 = require("./app/components/coffee-table.component");
-var sofa_component_1 = require("./app/components/sofa.component");
-var App = function () {
-    var _classDecorators = [(0, core_1.Component)({
-            selector: 'app-root',
-            standalone: true,
-            imports: [chair_component_1.ChairComponent, coffee_table_component_1.CoffeeTableComponent, sofa_component_1.SofaComponent],
-            template: "\n    <h1>Welcome to the Furniture Store!</h1>\n    <app-chair></app-chair>\n    <app-coffee-table></app-coffee-table>\n    <app-sofa></app-sofa>\n  ",
+var CoffeeTableService = function () {
+    var _classDecorators = [(0, core_1.Injectable)({
+            providedIn: 'root'
         })];
     var _classDescriptor;
     var _classExtraInitializers = [];
     var _classThis;
-    var App = _classThis = /** @class */ (function () {
-        function App_1() {
+    var CoffeeTableService = _classThis = /** @class */ (function () {
+        function CoffeeTableService_1() {
+            this.style = '';
+            this.material = '';
+            this.shape = '';
+            this.color = '';
+            this.diameter = 0;
+            this.weight = 0;
         }
-        return App_1;
+        CoffeeTableService_1.prototype.display = function () {
+            return "This coffee table showcases a timeless ".concat(this.shape, " design in the ").concat(this.style, " style, meticulously crafted from ").concat(this.material, ".");
+        };
+        CoffeeTableService_1.prototype.calculateSurfaceArea = function () {
+            return Math.PI * Math.pow(this.diameter / 2, 2);
+        };
+        CoffeeTableService_1.prototype.isEasyToMove = function (threshold) {
+            return this.weight < threshold;
+        };
+        return CoffeeTableService_1;
     }());
-    __setFunctionName(_classThis, "App");
+    __setFunctionName(_classThis, "CoffeeTableService");
     (function () {
         var _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
         __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
-        App = _classThis = _classDescriptor.value;
+        CoffeeTableService = _classThis = _classDescriptor.value;
         if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         __runInitializers(_classThis, _classExtraInitializers);
     })();
-    return App = _classThis;
+    return CoffeeTableService = _classThis;
 }();
-exports.App = App;
-(0, platform_browser_1.bootstrapApplication)(App);
+exports.CoffeeTableService = CoffeeTableService;

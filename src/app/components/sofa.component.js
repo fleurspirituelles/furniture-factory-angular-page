@@ -38,36 +38,32 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.App = void 0;
+exports.SofaComponent = void 0;
 var core_1 = require("@angular/core");
-var platform_browser_1 = require("@angular/platform-browser");
-var chair_component_1 = require("./app/components/chair.component");
-var coffee_table_component_1 = require("./app/components/coffee-table.component");
-var sofa_component_1 = require("./app/components/sofa.component");
-var App = function () {
+var sofa_service_1 = require("../services/sofa.service");
+var SofaComponent = function () {
     var _classDecorators = [(0, core_1.Component)({
-            selector: 'app-root',
+            selector: 'app-sofa',
             standalone: true,
-            imports: [chair_component_1.ChairComponent, coffee_table_component_1.CoffeeTableComponent, sofa_component_1.SofaComponent],
-            template: "\n    <h1>Welcome to the Furniture Store!</h1>\n    <app-chair></app-chair>\n    <app-coffee-table></app-coffee-table>\n    <app-sofa></app-sofa>\n  ",
+            template: "\n    <div>\n      <h2>{{ sofaService.display() }}</h2>\n      <p>Volume: {{ sofaService.calculateVolume() }}</p>\n      <p>Heavy: {{ sofaService.isHeavy(20) ? 'Yes' : 'No' }}</p>\n    </div>\n  "
         })];
     var _classDescriptor;
     var _classExtraInitializers = [];
     var _classThis;
-    var App = _classThis = /** @class */ (function () {
-        function App_1() {
+    var SofaComponent = _classThis = /** @class */ (function () {
+        function SofaComponent_1() {
+            this.sofaService = (0, core_1.inject)(sofa_service_1.SofaService);
         }
-        return App_1;
+        return SofaComponent_1;
     }());
-    __setFunctionName(_classThis, "App");
+    __setFunctionName(_classThis, "SofaComponent");
     (function () {
         var _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
         __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
-        App = _classThis = _classDescriptor.value;
+        SofaComponent = _classThis = _classDescriptor.value;
         if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         __runInitializers(_classThis, _classExtraInitializers);
     })();
-    return App = _classThis;
+    return SofaComponent = _classThis;
 }();
-exports.App = App;
-(0, platform_browser_1.bootstrapApplication)(App);
+exports.SofaComponent = SofaComponent;
