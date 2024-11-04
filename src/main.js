@@ -41,29 +41,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 var core_1 = require("@angular/core");
 var platform_browser_1 = require("@angular/platform-browser");
-var navbar_component_1 = require("./navbar.component");
-var home_component_1 = require("./home.component");
-var games_component_1 = require("./games.component");
-var gallery_component_1 = require("./gallery.component");
-var footer_component_1 = require("./footer.component");
 var App = function () {
     var _classDecorators = [(0, core_1.Component)({
             selector: 'app-root',
             standalone: true,
-            imports: [
-                navbar_component_1.NavbarComponent,
-                home_component_1.HomeComponent,
-                games_component_1.GamesComponent,
-                gallery_component_1.GalleryComponent,
-                footer_component_1.FooterComponent,
-            ],
-            template: "\n    <app-navbar></app-navbar>\n    <app-home></app-home>\n    <app-games></app-games>\n    <app-gallery></app-gallery>\n    <app-footer></app-footer>\n  ",
+            template: "\n    <h1>Hello from the {{ name }}!</h1>\n  ",
         })];
     var _classDescriptor;
     var _classExtraInitializers = [];
     var _classThis;
     var App = _classThis = /** @class */ (function () {
         function App_1() {
+            this.name = 'Furniture Store';
         }
         return App_1;
     }());
