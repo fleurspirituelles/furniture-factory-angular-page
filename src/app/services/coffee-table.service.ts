@@ -31,10 +31,13 @@ export class CoffeeTableService {
     style: string,
     material: string,
     shape: string,
-    color: string,
-    diameter: number,
-    weight: number
+    color: string = 'Default Color',
+    diameter: number = 100,
+    weight: number = 20
   ): CoffeeTable {
+    if (diameter <= 0 || weight <= 0) {
+      throw new Error('Diameter and weight must be positive values.');
+    }
     return new CoffeeTable(style, material, shape, color, diameter, weight);
   }
 }

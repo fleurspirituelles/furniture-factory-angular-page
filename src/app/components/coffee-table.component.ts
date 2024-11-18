@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CoffeeTableService } from '../services/coffee-table.service';
+import { CoffeeTable } from '../services/coffee-table.service'; // Importa a classe CoffeeTable
 
 @Component({
   selector: 'app-coffee-table',
@@ -12,18 +13,31 @@ import { CoffeeTableService } from '../services/coffee-table.service';
     </div>
   `
 })
+
 export class CoffeeTableComponent {
   private coffeeTableService = inject(CoffeeTableService);
+  private coffeeTable: CoffeeTable;
+
+  constructor() {
+    this.coffeeTable = this.coffeeTableService.createCoffeeTable(
+      'Modern',
+      'Glass',
+      'Round',
+      'Transparent',
+      100,
+      20
+    );
+  }
 
   getCoffeeTableDescription(): string {
-    return this.coffeeTableService.display();
+    return this.coffeeTable.display();
   }
 
   getSurfaceArea(): number {
-    return this.coffeeTableService.calculateSurfaceArea();
+    return this.coffeeTable.calculateSurfaceArea();
   }
 
   isEasyToMove(): string {
-    return this.coffeeTableService.isEasyToMove(15) ? 'Yes' : 'No';
+    return this.coffeeTable.isEasyToMove(25) ? 'Yes' : 'No';
   }
 }

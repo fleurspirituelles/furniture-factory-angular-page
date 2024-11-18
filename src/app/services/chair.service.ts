@@ -31,12 +31,15 @@ export class ChairService {
   createChair(
     style: string,
     material: string,
-    hasArmrest: boolean,
-    color: string,
-    height: number,
-    width: number,
-    weight: number
+    hasArmrest: boolean = false,
+    color: string = 'Default Color',
+    height: number = 80,
+    width: number = 50,
+    weight: number = 10
   ): Chair {
+    if (height <= 0 || width <= 0 || weight <= 0) {
+      throw new Error('Height, width, and weight must be positive values.');
+    }
     return new Chair(style, material, hasArmrest, color, height, width, weight);
   }
 }

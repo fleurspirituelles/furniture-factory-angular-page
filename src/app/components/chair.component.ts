@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ChairService } from '../services/chair.service';
+import { Chair } from '../services/chair.service';
 
 @Component({
   selector: 'app-chair',
@@ -12,18 +13,32 @@ import { ChairService } from '../services/chair.service';
     </div>
   `
 })
+
 export class ChairComponent {
   private chairService = inject(ChairService);
+  private chair: Chair;
+
+  constructor() {
+    this.chair = this.chairService.createChair(
+      'Modern',
+      'Plastic',
+      true,
+      'White',
+      85,
+      45,
+      10
+    );
+  }
 
   getChairDescription(): string {
-    return this.chairService.display();
+    return this.chair.display();
   }
 
   getChairArea(): number {
-    return this.chairService.calculateArea();
+    return this.chair.calculateArea();
   }
 
   isChairLightweight(): string {
-    return this.chairService.isLightweight(10) ? 'Yes' : 'No';
+    return this.chair.isLightweight(10) ? 'Yes' : 'No';
   }
 }

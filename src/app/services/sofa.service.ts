@@ -31,12 +31,15 @@ export class SofaService {
   createSofa(
     style: string,
     material: string,
-    seats: number,
-    color: string,
-    length: number,
-    width: number,
-    weight: number
+    seats: number = 3,
+    color: string = 'Default Color',
+    length: number = 200,
+    width: number = 90,
+    weight: number = 40
   ): Sofa {
+    if (length <= 0 || width <= 0 || weight <= 0 || seats <= 0) {
+      throw new Error('Length, width, weight, and seats must be positive values.');
+    }
     return new Sofa(style, material, seats, color, length, width, weight);
   }
 }

@@ -1,41 +1,41 @@
 export interface Furniture {
-    style: string;
-    material: string;
-    color: string;
-    weight: number;
+	style: string;
+	material: string;
+	color: string;
+	weight: number;
 
-    display(): string;
+	display(): string;
 }
 
 export interface Chair extends Furniture {
-    hasArmrest: boolean;
-    height: number;
-    width: number;
+	hasArmrest: boolean;
+	height: number;
+	width: number;
 
-    calculateArea(): number;
-    isLightweight(threshold: number): boolean;
+	calculateArea(): number;
+	isLightweight(threshold: number): boolean;
 }
 
 export interface Sofa extends Furniture {
-    seats: number;
-    length: number;
-    width: number;
+	seats: number;
+	length: number;
+	width: number;
 
-    calculateVolume(): number;
-    isHeavy(threshold: number): boolean;
+	calculateVolume(): number;
+	isHeavy(threshold: number): boolean;
 }
 
 export interface CoffeeTable extends Furniture {
-    shape: string;
-    diameter: number;
+	shape: string;
+	diameter: number;
 
-    calculateSurfaceArea(): number;
-    isEasyToMove(threshold: number): boolean;
+	calculateSurfaceArea(): number;
+	isEasyToMove(threshold: number): boolean;
 }
 
 export interface FurnitureFactory {
-    createChair(): Chair;
-    createSofa(): Sofa;
-    createCoffeeTable(): CoffeeTable;
-    getStyle(): string;
+	createChair(): Chair;
+	createSofa(): Sofa;
+	createCoffeeTable(): CoffeeTable;
+	getStyle(): string;
 }
