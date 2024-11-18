@@ -40,9 +40,71 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VictorianFurnitureFactoryService = void 0;
 var core_1 = require("@angular/core");
+var VictorianChair = /** @class */ (function () {
+    function VictorianChair() {
+        this.style = 'Victorian';
+        this.material = 'Wood';
+        this.hasArmrest = true;
+        this.color = 'Dark Brown';
+        this.height = 100;
+        this.width = 55;
+        this.weight = 18;
+    }
+    VictorianChair.prototype.display = function () {
+        return "This is a ".concat(this.style, " chair made of ").concat(this.material, " in ").concat(this.color, " color with armrests.");
+    };
+    VictorianChair.prototype.calculateArea = function () {
+        return this.height * this.width;
+    };
+    VictorianChair.prototype.isLightweight = function (threshold) {
+        return this.weight < threshold;
+    };
+    return VictorianChair;
+}());
+var VictorianSofa = /** @class */ (function () {
+    function VictorianSofa() {
+        this.style = 'Victorian';
+        this.material = 'Fabric';
+        this.seats = 4;
+        this.color = 'Red';
+        this.length = 220;
+        this.width = 90;
+        this.weight = 50;
+    }
+    VictorianSofa.prototype.display = function () {
+        return "This is a ".concat(this.style, " sofa made of ").concat(this.material, " with ").concat(this.seats, " seats in ").concat(this.color, " color.");
+    };
+    VictorianSofa.prototype.calculateVolume = function () {
+        return this.length * this.width * this.seats;
+    };
+    VictorianSofa.prototype.isHeavy = function (threshold) {
+        return this.weight > threshold;
+    };
+    return VictorianSofa;
+}());
+var VictorianCoffeeTable = /** @class */ (function () {
+    function VictorianCoffeeTable() {
+        this.style = 'Victorian';
+        this.material = 'Wood';
+        this.shape = 'Rectangular';
+        this.color = 'Mahogany';
+        this.diameter = 120;
+        this.weight = 30;
+    }
+    VictorianCoffeeTable.prototype.display = function () {
+        return "This is a ".concat(this.style, " coffee table made of ").concat(this.material, " in ").concat(this.color, " color with a ").concat(this.shape, " shape.");
+    };
+    VictorianCoffeeTable.prototype.calculateSurfaceArea = function () {
+        return this.diameter * this.diameter / 2;
+    };
+    VictorianCoffeeTable.prototype.isEasyToMove = function (threshold) {
+        return this.weight < threshold;
+    };
+    return VictorianCoffeeTable;
+}());
 var VictorianFurnitureFactoryService = function () {
     var _classDecorators = [(0, core_1.Injectable)({
-            providedIn: 'root'
+            providedIn: 'root',
         })];
     var _classDescriptor;
     var _classExtraInitializers = [];
@@ -51,63 +113,13 @@ var VictorianFurnitureFactoryService = function () {
         function VictorianFurnitureFactoryService_1() {
         }
         VictorianFurnitureFactoryService_1.prototype.createChair = function () {
-            return {
-                style: 'Victorian',
-                material: 'Wood',
-                hasArmrest: true,
-                color: 'Dark Brown',
-                height: 100,
-                width: 55,
-                weight: 18,
-                display: function () {
-                    return "This is a ".concat(this.style, " chair made of ").concat(this.material, " in ").concat(this.color, " color with armrests.");
-                },
-                calculateArea: function () {
-                    return this.height * this.width;
-                },
-                isLightweight: function (threshold) {
-                    return this.weight < threshold;
-                }
-            };
+            return new VictorianChair();
         };
         VictorianFurnitureFactoryService_1.prototype.createSofa = function () {
-            return {
-                style: 'Victorian',
-                material: 'Fabric',
-                seats: 4,
-                color: 'Red',
-                length: 220,
-                width: 90,
-                weight: 50,
-                display: function () {
-                    return "This is a ".concat(this.style, " sofa made of ").concat(this.material, " with ").concat(this.seats, " seats in ").concat(this.color, " color.");
-                },
-                calculateVolume: function () {
-                    return this.length * this.width * this.seats;
-                },
-                isHeavy: function (threshold) {
-                    return this.weight > threshold;
-                }
-            };
+            return new VictorianSofa();
         };
         VictorianFurnitureFactoryService_1.prototype.createCoffeeTable = function () {
-            return {
-                style: 'Victorian',
-                material: 'Wood',
-                shape: 'Rectangular',
-                color: 'Mahogany',
-                diameter: 120,
-                weight: 30,
-                display: function () {
-                    return "This is a ".concat(this.style, " coffee table made of ").concat(this.material, " in ").concat(this.color, " color with a ").concat(this.shape, " shape.");
-                },
-                calculateSurfaceArea: function () {
-                    return this.diameter * this.diameter / 2;
-                },
-                isEasyToMove: function (threshold) {
-                    return this.weight < threshold;
-                }
-            };
+            return new VictorianCoffeeTable();
         };
         VictorianFurnitureFactoryService_1.prototype.getStyle = function () {
             return 'Victorian';

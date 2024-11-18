@@ -40,9 +40,71 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ArtDecoFurnitureFactoryService = void 0;
 var core_1 = require("@angular/core");
+var ArtDecoChair = /** @class */ (function () {
+    function ArtDecoChair() {
+        this.style = 'Art Deco';
+        this.material = 'Metal';
+        this.hasArmrest = false;
+        this.color = 'Gold';
+        this.height = 90;
+        this.width = 50;
+        this.weight = 15;
+    }
+    ArtDecoChair.prototype.display = function () {
+        return "This is an ".concat(this.style, " chair made of ").concat(this.material, " in ").concat(this.color, " color.");
+    };
+    ArtDecoChair.prototype.calculateArea = function () {
+        return this.height * this.width;
+    };
+    ArtDecoChair.prototype.isLightweight = function (threshold) {
+        return this.weight < threshold;
+    };
+    return ArtDecoChair;
+}());
+var ArtDecoSofa = /** @class */ (function () {
+    function ArtDecoSofa() {
+        this.style = 'Art Deco';
+        this.material = 'Leather';
+        this.seats = 3;
+        this.color = 'Black';
+        this.length = 200;
+        this.width = 80;
+        this.weight = 40;
+    }
+    ArtDecoSofa.prototype.display = function () {
+        return "This is an ".concat(this.style, " sofa made of ").concat(this.material, " with ").concat(this.seats, " seats in ").concat(this.color, " color.");
+    };
+    ArtDecoSofa.prototype.calculateVolume = function () {
+        return this.length * this.width * this.seats;
+    };
+    ArtDecoSofa.prototype.isHeavy = function (threshold) {
+        return this.weight > threshold;
+    };
+    return ArtDecoSofa;
+}());
+var ArtDecoCoffeeTable = /** @class */ (function () {
+    function ArtDecoCoffeeTable() {
+        this.style = 'Art Deco';
+        this.material = 'Glass';
+        this.shape = 'Round';
+        this.color = 'Silver';
+        this.diameter = 100;
+        this.weight = 20;
+    }
+    ArtDecoCoffeeTable.prototype.display = function () {
+        return "This is an ".concat(this.style, " coffee table made of ").concat(this.material, " in ").concat(this.color, " color with a ").concat(this.shape, " shape.");
+    };
+    ArtDecoCoffeeTable.prototype.calculateSurfaceArea = function () {
+        return Math.PI * Math.pow(this.diameter / 2, 2);
+    };
+    ArtDecoCoffeeTable.prototype.isEasyToMove = function (threshold) {
+        return this.weight < threshold;
+    };
+    return ArtDecoCoffeeTable;
+}());
 var ArtDecoFurnitureFactoryService = function () {
     var _classDecorators = [(0, core_1.Injectable)({
-            providedIn: 'root'
+            providedIn: 'root',
         })];
     var _classDescriptor;
     var _classExtraInitializers = [];
@@ -51,63 +113,13 @@ var ArtDecoFurnitureFactoryService = function () {
         function ArtDecoFurnitureFactoryService_1() {
         }
         ArtDecoFurnitureFactoryService_1.prototype.createChair = function () {
-            return {
-                style: 'Art Deco',
-                material: 'Metal',
-                hasArmrest: false,
-                color: 'Gold',
-                height: 90,
-                width: 50,
-                weight: 15,
-                display: function () {
-                    return "This is an ".concat(this.style, " chair made of ").concat(this.material, " in ").concat(this.color, " color.");
-                },
-                calculateArea: function () {
-                    return this.height * this.width;
-                },
-                isLightweight: function (threshold) {
-                    return this.weight < threshold;
-                }
-            };
+            return new ArtDecoChair();
         };
         ArtDecoFurnitureFactoryService_1.prototype.createSofa = function () {
-            return {
-                style: 'Art Deco',
-                material: 'Leather',
-                seats: 3,
-                color: 'Black',
-                length: 200,
-                width: 80,
-                weight: 40,
-                display: function () {
-                    return "This is an ".concat(this.style, " sofa made of ").concat(this.material, " with ").concat(this.seats, " seats in ").concat(this.color, " color.");
-                },
-                calculateVolume: function () {
-                    return this.length * this.width * this.seats;
-                },
-                isHeavy: function (threshold) {
-                    return this.weight > threshold;
-                }
-            };
+            return new ArtDecoSofa();
         };
         ArtDecoFurnitureFactoryService_1.prototype.createCoffeeTable = function () {
-            return {
-                style: 'Art Deco',
-                material: 'Glass',
-                shape: 'Round',
-                color: 'Silver',
-                diameter: 100,
-                weight: 20,
-                display: function () {
-                    return "This is an ".concat(this.style, " coffee table made of ").concat(this.material, " in ").concat(this.color, " color with a ").concat(this.shape, " shape.");
-                },
-                calculateSurfaceArea: function () {
-                    return Math.PI * Math.pow(this.diameter / 2, 2);
-                },
-                isEasyToMove: function (threshold) {
-                    return this.weight < threshold;
-                }
-            };
+            return new ArtDecoCoffeeTable();
         };
         ArtDecoFurnitureFactoryService_1.prototype.getStyle = function () {
             return 'Art Deco';
