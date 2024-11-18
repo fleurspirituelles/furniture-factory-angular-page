@@ -41,7 +41,8 @@ import { FurnitureFactory, Chair, CoffeeTable, Sofa } from './app/interfaces/fur
       <h2>Shopping Cart</h2>
       <ul>
         <li *ngFor="let item of cart">
-          {{ item.type }} - {{ item.style }}<br>
+          <span class="cart-item-type">{{ item.type }}: </span>
+          <span class="cart-item-style">{{ item.style }}</span><br>
           {{ item.details }}
         </li>
       </ul>
@@ -101,9 +102,9 @@ export class App {
     let details = '';
     switch (this.selectedFurnitureType) {
       case 'chair':
-      const chair = factory.createChair();
-      details = `This exquisite ${chair.style} chair, crafted from fine ${chair.material} with a splendid ${chair.color} finish, brings both elegance and comfort to any room. It offers a surface area of ${chair.calculateArea()} square centimeters, and with its weight of ${chair.weight} kg, it is ${chair.isLightweight(10) ? 'lightweight and easy to move' : 'sturdy and stable'}.`;
-      break;
+        const chair = factory.createChair();
+        details = `This exquisite ${chair.style} chair, crafted from fine ${chair.material} with a splendid ${chair.color} finish, brings both elegance and comfort to any room. It offers a surface area of ${chair.calculateArea()} square centimeters, and with its weight of ${chair.weight} kg, it is ${chair.isLightweight(10) ? 'lightweight and easy to move' : 'sturdy and stable'}.`;
+        break;
 
       case 'coffeeTable':
         const coffeeTable = factory.createCoffeeTable();
@@ -114,7 +115,7 @@ export class App {
         const sofa = factory.createSofa();
         details = `Indulge in the comfort of this luxurious ${sofa.style} sofa, upholstered in premium ${sofa.material} and designed to accommodate up to ${sofa.seats} guests. With a generous volume of ${sofa.calculateVolume()} cubic centimeters, it provides ${sofa.isHeavy(20) ? 'a substantial presence in your living area' : 'a cozy yet light addition to any space'}.`;
         break;
-        
+
       default:
         return;
     }
