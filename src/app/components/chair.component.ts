@@ -6,12 +6,24 @@ import { ChairService } from '../services/chair.service';
   standalone: true,
   template: `
     <div>
-      <h2>{{ chairService.display() }}</h2>
-      <p>Area: {{ chairService.calculateArea() }}</p>
-      <p>Lightweight: {{ chairService.isLightweight(10) ? 'Yes' : 'No' }}</p>
+      <h2>{{ getChairDescription() }}</h2>
+      <p>Area: {{ getChairArea() }} cm²</p>
+      <p>Lightweight: {{ isChairLightweight() }}</p>
     </div>
   `
 })
 export class ChairComponent {
-  chairService = inject(ChairService);
+  private chairService = inject(ChairService);
+
+  getChairDescription(): string {
+    return this.chairService.display();
+  }
+
+  getChairArea(): number {
+    return this.chairService.calculateArea();
+  }
+
+  isChairLightweight(): string {
+    return this.chairService.isLightweight(10) ? 'Yes' : 'No';
+  }
 }

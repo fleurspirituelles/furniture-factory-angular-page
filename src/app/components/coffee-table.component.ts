@@ -6,12 +6,24 @@ import { CoffeeTableService } from '../services/coffee-table.service';
   standalone: true,
   template: `
     <div>
-      <h2>{{ coffeeTableService.display() }}</h2>
-      <p>Surface Area: {{ coffeeTableService.calculateSurfaceArea() }}</p>
-      <p>Easy to Move: {{ coffeeTableService.isEasyToMove(15) ? 'Yes' : 'No' }}</p>
+      <h2>{{ getCoffeeTableDescription() }}</h2>
+      <p>Surface Area: {{ getSurfaceArea() }} cm²</p>
+      <p>Easy to Move: {{ isEasyToMove() }}</p>
     </div>
   `
 })
 export class CoffeeTableComponent {
-  coffeeTableService = inject(CoffeeTableService);
+  private coffeeTableService = inject(CoffeeTableService);
+
+  getCoffeeTableDescription(): string {
+    return this.coffeeTableService.display();
+  }
+
+  getSurfaceArea(): number {
+    return this.coffeeTableService.calculateSurfaceArea();
+  }
+
+  isEasyToMove(): string {
+    return this.coffeeTableService.isEasyToMove(15) ? 'Yes' : 'No';
+  }
 }

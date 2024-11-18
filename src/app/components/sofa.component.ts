@@ -6,12 +6,24 @@ import { SofaService } from '../services/sofa.service';
   standalone: true,
   template: `
     <div>
-      <h2>{{ sofaService.display() }}</h2>
-      <p>Volume: {{ sofaService.calculateVolume() }}</p>
-      <p>Heavy: {{ sofaService.isHeavy(20) ? 'Yes' : 'No' }}</p>
+      <h2>{{ getSofaDescription() }}</h2>
+      <p>Volume: {{ getSofaVolume() }} cm³</p>
+      <p>Heavy: {{ isSofaHeavy() }}</p>
     </div>
   `
 })
 export class SofaComponent {
-  sofaService = inject(SofaService);
+  private sofaService = inject(SofaService);
+
+  getSofaDescription(): string {
+    return this.sofaService.display();
+  }
+
+  getSofaVolume(): number {
+    return this.sofaService.calculateVolume();
+  }
+
+  isSofaHeavy(): string {
+    return this.sofaService.isHeavy(20) ? 'Yes' : 'No';
+  }
 }
