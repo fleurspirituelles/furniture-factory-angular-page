@@ -11,7 +11,8 @@ import { ArtDecoFurnitureFactoryService } from './app/services/art-deco-furnitur
 import { ModernFurnitureFactoryService } from './app/services/modern-furniture.factory.service';
 import { VictorianFurnitureFactoryService } from './app/services/victorian-furniture.factory.service';
 
-import { FurnitureFactory, Chair, CoffeeTable, Sofa } from './app/interfaces/furniture-factory.interface';
+import { CartService } from './app/services/cart.service';
+import { StyleService } from './app/services/style.service';
 
 @Component({
   selector: 'app-root',
@@ -40,7 +41,7 @@ import { FurnitureFactory, Chair, CoffeeTable, Sofa } from './app/interfaces/fur
 
       <h2>Shopping Cart</h2>
       <ul>
-        <li *ngFor="let item of cart">
+        <li *ngFor="let item of cartService.getCart()">
           <span class="cart-item-type">{{ item.type }}: </span>
           <span class="cart-item-style">{{ item.style }}</span><br>
           {{ item.details }}
@@ -63,10 +64,6 @@ import { FurnitureFactory, Chair, CoffeeTable, Sofa } from './app/interfaces/fur
 export class App {
   selectedFurnitureType: string = 'chair';
   selectedStyle: string = 'art-deco';
-  initialStyle: string | null = null;
-
-  cart: Array<{ type: string; style: string; details: string }> = [];
-  styleWarning: boolean = false;
   permanentWarning: boolean = false;
   purchaseComplete: boolean = false;
 
@@ -74,59 +71,23 @@ export class App {
   modernFactory = inject(ModernFurnitureFactoryService);
   victorianFactory = inject(VictorianFurnitureFactoryService);
 
+  cartService = inject(CartService);
+  styleService = inject(StyleService);
+
   addFurniture() {
-    if (!this.initialStyle) {
-      this.initialStyle = this.selectedStyle;
-    } else if (this.initialStyle !== this.selectedStyle) {
-      this.styleWarning = true;
+    if (this.styleService.hasStyleConflict(this.selectedStyle)) {
       this.permanentWarning = true;
     } else {
-      this.styleWarning = false;
+      const factory = this.getFactory(this.selectedStyle);
+      if (!factory) return;
+
+      const details = this.createFurnitureDetails(factory);
+      this.cartService.addItem({
+        type: this.selectedFurnitureType,
+        style: this.selectedStyle,
+        details,
+      });
     }
-
-    let factory: FurnitureFactory;
-    switch (this.selectedStyle) {
-      case 'art-deco':
-        factory = this.artDecoFactory;
-        break;
-      case 'modern':
-        factory = this.modernFactory;
-        break;
-      case 'victorian':
-        factory = this.victorianFactory;
-        break;
-      default:
-        return;
-    }
-
-    let details = '';
-    switch (this.selectedFurnitureType) {
-      case 'chair':
-        const chair = factory.createChair();
-        details = `This exquisite ${chair.style} chair, crafted from fine ${chair.material} with a splendid ${chair.color} finish, brings both elegance and comfort to any room. It offers a surface area of ${chair.calculateArea()} square centimeters, and with its weight of ${chair.weight} kg, it is ${chair.isLightweight(10) ? 'lightweight and easy to move' : 'sturdy and stable'}.`;
-        break;
-
-      case 'coffeeTable':
-        const coffeeTable = factory.createCoffeeTable();
-        details = `The ${coffeeTable.style} coffee table, a masterpiece of ${coffeeTable.material} with a ${coffeeTable.shape} shape in ${coffeeTable.color}, adds a touch of sophistication to your space. Its surface area spans ${coffeeTable.calculateSurfaceArea()} square centimeters, making it ${coffeeTable.isEasyToMove(15) ? 'easy to rearrange' : 'solid and steadfast'}.`;
-        break;
-
-      case 'sofa':
-        const sofa = factory.createSofa();
-        details = `Indulge in the comfort of this luxurious ${sofa.style} sofa, upholstered in premium ${sofa.material} and designed to accommodate up to ${sofa.seats} guests. With a generous volume of ${sofa.calculateVolume()} cubic centimeters, it provides ${sofa.isHeavy(20) ? 'a substantial presence in your living area' : 'a cozy yet light addition to any space'}.`;
-        break;
-
-      default:
-        return;
-    }
-
-    this.cart.push({
-      type: this.selectedFurnitureType,
-      style: this.selectedStyle,
-      details,
-    });
-
-    this.styleWarning = false;
   }
 
   completePurchase() {
@@ -134,12 +95,44 @@ export class App {
   }
 
   resetPurchase() {
-    this.cart = [];
-    this.initialStyle = null;
+    this.cartService.clearCart();
+    this.styleService.resetStyle();
     this.permanentWarning = false;
     this.purchaseComplete = false;
     this.selectedFurnitureType = 'chair';
     this.selectedStyle = 'art-deco';
+  }
+
+  private getFactory(style: string) {
+    switch (style) {
+      case 'art-deco':
+        return this.artDecoFactory;
+      case 'modern':
+        return this.modernFactory;
+      case 'victorian':
+        return this.victorianFactory;
+      default:
+        return null;
+    }
+  }
+
+  private createFurnitureDetails(factory: any): string {
+    switch (this.selectedFurnitureType) {
+      case 'chair':
+        const chair = factory.createChair();
+        return `This exquisite ${chair.style} chair, crafted from fine ${chair.material} with a splendid ${chair.color} finish, brings both elegance and comfort to any room. It offers a surface area of ${chair.calculateArea()} square centimeters, and with its weight of ${chair.weight} kg, it is ${chair.isLightweight(10) ? 'lightweight and easy to move' : 'sturdy and stable'}.`;
+
+      case 'coffeeTable':
+        const coffeeTable = factory.createCoffeeTable();
+        return `The ${coffeeTable.style} coffee table, a masterpiece of ${coffeeTable.material} with a ${coffeeTable.shape} shape in ${coffeeTable.color}, adds a touch of sophistication to your space. Its surface area spans ${coffeeTable.calculateSurfaceArea()} square centimeters, making it ${coffeeTable.isEasyToMove(15) ? 'easy to rearrange' : 'solid and steadfast'}.`;
+
+      case 'sofa':
+        const sofa = factory.createSofa();
+        return `Indulge in the comfort of this luxurious ${sofa.style} sofa, upholstered in premium ${sofa.material} and designed to accommodate up to ${sofa.seats} guests. With a generous volume of ${sofa.calculateVolume()} cubic centimeters, it provides ${sofa.isHeavy(20) ? 'a substantial presence in your living area' : 'a cozy yet light addition to any space'}.`;
+
+      default:
+        return '';
+    }
   }
 }
 
