@@ -94,3 +94,30 @@ li {
     font-weight: bold;
     color: white;
 }
+
+/* Cart Icon */
+div > span {
+    position: relative;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    cursor: pointer;
+    display: inline-block;
+}
+
+div > span > span {
+    font-size: 1rem;
+    background-color: var(--button-hover-color);
+    color: white;
+    border-radius: 50%;
+    padding: 2px 8px;
+    position: absolute;
+    top: -10px;
+    right: -15px;
+    font-weight: bold;
+}
+
+/* Backdrop */
+div[style*="position: fixed; top: 0;"] {
+    background-color: var(--backdrop-color);
+    z-index: 500;
+}
