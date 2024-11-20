@@ -4,6 +4,10 @@
     --accent-color: #d9c7a0;
     --text-color: #4a3b2b;
     --button-hover-color: #b78c5d;
+    --modal-background: #ffffff;
+    --backdrop-color: rgba(0, 0, 0, 0.7);
+    --modal-header-color: #a67c52;
+    --modal-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 body {
@@ -49,8 +53,6 @@ button {
 }
 
 select {
-    background-color: var(--secondary-color);
-    color: var(--text-color);
     margin-bottom: 15px;
 }
 
@@ -80,17 +82,15 @@ li {
     border-radius: 8px;
     margin-bottom: 10px;
     padding: 10px;
-}
-
-div[style*="color: red;"] {
-    color: #ff4d4d;
-    font-weight: bold;
-    margin-top: 10px;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    color: var(--text-color);
 }
 
 .cart-item-type,
 .cart-item-style {
-    font-weight: bolder;
+    font-weight: bold;
     color: white;
 }
