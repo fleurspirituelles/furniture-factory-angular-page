@@ -13,6 +13,7 @@ import { VictorianFurnitureFactoryService } from './app/services/victorian-furni
 
 import { CartService } from './app/services/cart.service';
 import { StyleService } from './app/services/style.service';
+import { Furniture, FurnitureFactory } from './app/interfaces/furniture-factory.interface';
 
 @Component({
   selector: 'app-root',
@@ -74,14 +75,41 @@ export class App {
   cartService = inject(CartService);
   styleService = inject(StyleService);
 
+  private factoryMap: Record<string, FurnitureFactory> = {
+    'art-deco': this.artDecoFactory,
+    'modern': this.modernFactory,
+    'victorian': this.victorianFactory,
+  };
+  
+
+  private furnitureMap: Record<'chair' | 'coffeeTable' | 'sofa', (factory: FurnitureFactory) => Furniture> = {
+    chair: (factory: FurnitureFactory) => factory.createChair(),
+    coffeeTable: (factory: FurnitureFactory) => factory.createCoffeeTable(),
+    sofa: (factory: FurnitureFactory) => factory.createSofa(),
+  };
+  
+  
+
   addFurniture() {
     if (this.styleService.hasStyleConflict(this.selectedStyle)) {
       this.permanentWarning = true;
     } else {
-      const factory = this.getFactory(this.selectedStyle);
-      if (!factory) return;
+      const factory = this.factoryMap[this.selectedStyle];
+      if (!factory) {
+        console.error(`Factory not found for style: ${this.selectedStyle}`);
+        return;
+      }
+  
+      const createFurniture = this.furnitureMap[this.selectedFurnitureType as 'chair' | 'coffeeTable' | 'sofa'];
+      if (!createFurniture) {
+        console.error(`Furniture type not found: ${this.selectedFurnitureType}`);
+        return;
+      }
+  
+      const furniture = createFurniture(factory);
+  
+      const details = this.createFurnitureDetails(furniture);
 
-      const details = this.createFurnitureDetails(factory);
       this.cartService.addItem({
         type: this.selectedFurnitureType,
         style: this.selectedStyle,
@@ -89,6 +117,7 @@ export class App {
       });
     }
   }
+  
 
   completePurchase() {
     this.purchaseComplete = true;
@@ -103,36 +132,15 @@ export class App {
     this.selectedStyle = 'art-deco';
   }
 
-  private getFactory(style: string) {
-    switch (style) {
-      case 'art-deco':
-        return this.artDecoFactory;
-      case 'modern':
-        return this.modernFactory;
-      case 'victorian':
-        return this.victorianFactory;
-      default:
-        return null;
+  private createFurnitureDetails(furniture: any): string {
+    if (furniture.style === 'chair') {
+      return `This exquisite ${furniture.style} chair, crafted from fine ${furniture.material} with a splendid ${furniture.color} finish, brings both elegance and comfort to any room. It offers a surface area of ${furniture.calculateArea()} square centimeters, and with its weight of ${furniture.weight} kg, it is ${furniture.isLightweight(10) ? 'lightweight and easy to move' : 'sturdy and stable'}.`;
+    } else if (furniture.style === 'coffeeTable') {
+      return `The ${furniture.style} coffee table, a masterpiece of ${furniture.material} with a ${furniture.shape} shape in ${furniture.color}, adds a touch of sophistication to your space. Its surface area spans ${furniture.calculateSurfaceArea()} square centimeters, making it ${furniture.isEasyToMove(15) ? 'easy to rearrange' : 'solid and steadfast'}.`;
+    } else if (furniture.style === 'sofa') {
+      return `Indulge in the comfort of this luxurious ${furniture.style} sofa, upholstered in premium ${furniture.material} and designed to accommodate up to ${furniture.seats} guests. With a generous volume of ${furniture.calculateVolume()} cubic centimeters, it provides ${furniture.isHeavy(20) ? 'a substantial presence in your living area' : 'a cozy yet light addition to any space'}.`;
     }
-  }
-
-  private createFurnitureDetails(factory: any): string {
-    switch (this.selectedFurnitureType) {
-      case 'chair':
-        const chair = factory.createChair();
-        return `This exquisite ${chair.style} chair, crafted from fine ${chair.material} with a splendid ${chair.color} finish, brings both elegance and comfort to any room. It offers a surface area of ${chair.calculateArea()} square centimeters, and with its weight of ${chair.weight} kg, it is ${chair.isLightweight(10) ? 'lightweight and easy to move' : 'sturdy and stable'}.`;
-
-      case 'coffeeTable':
-        const coffeeTable = factory.createCoffeeTable();
-        return `The ${coffeeTable.style} coffee table, a masterpiece of ${coffeeTable.material} with a ${coffeeTable.shape} shape in ${coffeeTable.color}, adds a touch of sophistication to your space. Its surface area spans ${coffeeTable.calculateSurfaceArea()} square centimeters, making it ${coffeeTable.isEasyToMove(15) ? 'easy to rearrange' : 'solid and steadfast'}.`;
-
-      case 'sofa':
-        const sofa = factory.createSofa();
-        return `Indulge in the comfort of this luxurious ${sofa.style} sofa, upholstered in premium ${sofa.material} and designed to accommodate up to ${sofa.seats} guests. With a generous volume of ${sofa.calculateVolume()} cubic centimeters, it provides ${sofa.isHeavy(20) ? 'a substantial presence in your living area' : 'a cozy yet light addition to any space'}.`;
-
-      default:
-        return '';
-    }
+    return '';
   }
 }
 
